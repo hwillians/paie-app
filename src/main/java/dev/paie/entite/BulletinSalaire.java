@@ -4,15 +4,17 @@ import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class BulletinSalaire {
 	@Id
 	private Integer id;
-	@OneToOne
+
+	@ManyToOne
 	private RemunerationEmploye remunerationEmploye;
-	@OneToOne
+
+	@ManyToOne
 	private Periode periode;
 	private BigDecimal primeExceptionnelle;
 

@@ -13,6 +13,11 @@ public class Grade {
 	private BigDecimal nbHeuresBase;
 	private BigDecimal tauxBase;
 
+	@Override
+	public String toString() {
+		return code;
+	}
+
 	public String getCode() {
 		return code;
 	}

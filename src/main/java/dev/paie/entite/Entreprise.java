@@ -14,6 +14,11 @@ public class Entreprise {
 	private String urssaf;
 	private String codeNaf;
 
+	@Override
+	public String toString() {
+		return denomination;
+	}
+
 	public String getDenomination() {
 		return denomination;
 	}

@@ -19,6 +19,11 @@ public class ProfilRemuneration {
 	@ManyToMany
 	private List<Avantage> avantages;
 
+	@Override
+	public String toString() {
+		return code;
+	}
+
 	public Integer getId() {
 		return id;
 	}
