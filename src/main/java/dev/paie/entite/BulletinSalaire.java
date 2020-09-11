@@ -23,7 +23,34 @@ public class BulletinSalaire {
 	private Periode periode;
 
 	private BigDecimal primeExceptionnelle;
+
 	private LocalDateTime dateCreation;
+
+	/**
+	 * 
+	 */
+	public BulletinSalaire() {
+	}
+
+	@Override
+	public String toString() {
+		return "BulletinSalaire [id=" + id + ", remunerationEmploye=" + remunerationEmploye + ", periode=" + periode
+				+ ", primeExceptionnelle=" + primeExceptionnelle + ", dateCreation=" + dateCreation + "]";
+	}
+
+	/**
+	 * @param remunerationEmploye
+	 * @param periode
+	 * @param primeExceptionnelle
+	 * @param dateCreation
+	 */
+	public BulletinSalaire(RemunerationEmploye remunerationEmploye, Periode periode, BigDecimal primeExceptionnelle,
+			LocalDateTime dateCreation) {
+		this.remunerationEmploye = remunerationEmploye;
+		this.periode = periode;
+		this.primeExceptionnelle = primeExceptionnelle;
+		this.dateCreation = dateCreation;
+	}
 
 	public RemunerationEmploye getRemunerationEmploye() {
 		return remunerationEmploye;

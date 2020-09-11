@@ -2,8 +2,12 @@ package dev.paie.web.bulletinSalaire;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +18,9 @@ import dev.paie.entite.BulletinSalaire;
 import dev.paie.entite.Cotisation;
 import dev.paie.entite.Entreprise;
 import dev.paie.entite.Grade;
+import dev.paie.entite.ProfilRemuneration;
+import dev.paie.exception.PaieException;
+import dev.paie.repositories.ProfilRemunerationRepository;
 import dev.paie.services.BulletinService;
 import dev.paie.services.EntrepriseService;
 
@@ -23,16 +30,18 @@ public class BulletinController {
 
 	private BulletinService bullServ;
 	private EntrepriseService entServ;
+	private ProfilRemunerationRepository ProfilRep;
 
 	/**
 	 * @param bullServ
-	 * @param gradeRep
-	 * @param cotRep
+	 * @param entServ
+	 * @param profilRep
 	 */
-	public BulletinController(BulletinService bullServ, EntrepriseService entServ) {
+	public BulletinController(BulletinService bullServ, EntrepriseService entServ,
+			ProfilRemunerationRepository profilRep) {
 		this.bullServ = bullServ;
 		this.entServ = entServ;
-
+		ProfilRep = profilRep;
 	}
 
 	@GetMapping
@@ -58,24 +67,39 @@ public class BulletinController {
 	}
 
 	@PostMapping
-	public CreerBulletinReponseDtoPost creerBulletins(@RequestBody CreerBulletinSalaireResquestDtoPost bullRq,
+	public ResponseEntity<?> creerBulletins(@RequestBody @Validated CreerBulletinSalaireResquestDtoPost bullRq,
 			BindingResult resValid) {
+		if (!resValid.hasErrors()) {
+			BulletinSalaire bulletin = bullServ.creerBulletin(bullRq.getEntrepriseId(), bullRq.getPerdiodeId(),
+					bullRq.getProfilRemunerationId(), bullRq.getPrimeExetionnelle());
 
-		BulletinSalaire bulletin = bullServ.creerBulletin(bullRq.getEntrepriseId(), bullRq.getPerdiodeId(),
-				bullRq.getProfilRemunerationId(), bullRq.getPrimeExetionnelle());
+			Optional<ProfilRemuneration> opProfilNomImp = ProfilRep
+					.listerCotisationNonImp(bullRq.getProfilRemunerationId());
 
-		List<Cotisation> CotisationsNonImp = bullServ.listerCotisationNonImp();
+			List<Cotisation> CotisationsNonImp = opProfilNomImp.get().getCotisations();
 
-		List<Cotisation> CotisationsImposab = bullServ.listerCotisationImposable();
-		Grade grade = bullServ.getGrade(bulletin.getId());
-		String matricule = bullServ.getMatricule(bulletin.getId());
+			Optional<ProfilRemuneration> opProfilImp = ProfilRep
+					.listerCotisationImposable(bullRq.getProfilRemunerationId());
 
-		Entreprise entreprise = entServ.getEnterprise(bullRq.getEntrepriseId());
+			List<Cotisation> CotisationsImposab = opProfilImp.get().getCotisations();
 
-		CreerBulletinReponseDtoPost bulletinPost = new CreerBulletinReponseDtoPost(bulletin, grade, matricule,
-				entreprise, CotisationsNonImp, CotisationsImposab);
-		return bulletinPost;
+			Grade grade = bullServ.getGrade(bulletin.getId());
+			String matricule = bullServ.getMatricule(bulletin.getId());
 
+			Entreprise entreprise = entServ.getEnterprise(bullRq.getEntrepriseId());
+
+			CreerBulletinReponseDtoPost bulletinPost = new CreerBulletinReponseDtoPost(bulletin, grade, matricule,
+					entreprise, CotisationsNonImp, CotisationsImposab);
+			return ResponseEntity.ok(bulletinPost);
+		} else {
+			return ResponseEntity.badRequest().body("tous les champs sont obligatoires ! ");
+
+		}
 	}
 
+	@ExceptionHandler(PaieException.class)
+	public ResponseEntity<List<String>> onPaieException(PaieException ex) {
+		return ResponseEntity.badRequest().body(ex.getMessagesErreurs());
+
+	}
 }
