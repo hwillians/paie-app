@@ -1,11 +1,11 @@
-package dev.paie.web.employe;
+package dev.paie.web.remunerationEmploye;
 
 import com.sun.istack.NotNull;
 
-public class CreerEmployeResquestDto {
+public class CreerRemunerationEmployeResquestDto {
 
 	@NotNull
-	private Integer matricule;
+	private String matricule;
 
 	@NotNull
 	private Integer entrepriseId;
@@ -19,14 +19,14 @@ public class CreerEmployeResquestDto {
 	/**
 	 * @return the matricule
 	 */
-	public Integer getMatricule() {
+	public String getMatricule() {
 		return matricule;
 	}
 
 	/**
 	 * @param matricule the matricule to set
 	 */
-	public void setMatricule(Integer matricule) {
+	public void setMatricule(String matricule) {
 		this.matricule = matricule;
 	}
 

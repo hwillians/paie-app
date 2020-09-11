@@ -1,16 +1,16 @@
-package dev.paie.web.employe;
+package dev.paie.web.remunerationEmploye;
 
-import dev.paie.entite.Employe;
+import dev.paie.entite.RemunerationEmploye;
 
-public class CreerEmployeReponseDto {
+public class CreerRemunerationEmployeReponseDto {
 
 	private Integer id;
-	private Integer Matricule;
+	private String Matricule;
 	private String Emtreprise;
 	private String Grade;
 	private String ProfilRe;
 
-	public CreerEmployeReponseDto(Employe emp) {
+	public CreerRemunerationEmployeReponseDto(RemunerationEmploye emp) {
 		id = emp.getId();
 		Matricule = emp.getMatricule();
 		Emtreprise = emp.getEntreprise().toString();
@@ -35,14 +35,14 @@ public class CreerEmployeReponseDto {
 	/**
 	 * @return the matricule
 	 */
-	public Integer getMatricule() {
+	public String getMatricule() {
 		return Matricule;
 	}
 
 	/**
 	 * @param matricule the matricule to set
 	 */
-	public void setMatricule(Integer matricule) {
+	public void setMatricule(String matricule) {
 		Matricule = matricule;
 	}
 

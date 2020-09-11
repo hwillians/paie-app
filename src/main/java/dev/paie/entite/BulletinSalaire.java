@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class BulletinSalaire {
+
 	@Id
 	private Integer id;
 
@@ -16,6 +17,7 @@ public class BulletinSalaire {
 
 	@ManyToOne
 	private Periode periode;
+
 	private BigDecimal primeExceptionnelle;
 
 	public RemunerationEmploye getRemunerationEmploye() {
