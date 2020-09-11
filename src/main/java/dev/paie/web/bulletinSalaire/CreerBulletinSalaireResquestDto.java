@@ -46,13 +46,6 @@ public class CreerBulletinSalaireResquestDto {
 	}
 
 	/**
-	 * @param finPeriode the finPeriode to set
-	 */
-	public void setFinPeriode(LocalDate finPeriode) {
-		this.finPeriode = finPeriode;
-	}
-
-	/**
 	 * @return the matricules
 	 */
 	public List<String> getMatricules() {
@@ -64,6 +57,13 @@ public class CreerBulletinSalaireResquestDto {
 	 */
 	public void setMatricules(List<String> matricules) {
 		this.matricules = matricules;
+	}
+
+	/**
+	 * @param finPeriode the finPeriode to set
+	 */
+	public void setFinPeriode(LocalDate finPeriode) {
+		this.finPeriode = finPeriode;
 	}
 
 }
