@@ -59,6 +59,7 @@ public class CreerBulletinReponseDtoPost {
 		// Calcul Salaire de base
 		baseSalarial = grade.getNbHeuresBase();
 		tauxSalarial = grade.getTauxBase();
+
 		montantSalarial = baseSalarial.multiply(tauxSalarial);
 
 		primeExceptionnelle = bs.getPrimeExceptionnelle();
@@ -70,44 +71,65 @@ public class CreerBulletinReponseDtoPost {
 		Cotisation EP01 = cotisationsNonImp.stream().filter(c -> c.getId().equals(3)).findAny().get();
 
 		tauxSalarialEP01 = EP01.getTauxSalarial();
+
 		montantSalarialEP01 = montantSalarial.multiply(tauxSalarialEP01);
 
 		tauxPatronalEP01 = EP01.getTauxPatronal();
+
 		montantPatronalEP01 = montantSalarial.multiply(tauxPatronalEP01);
 
 		Cotisation EP02 = cotisationsNonImp.stream().filter(c -> c.getId().equals(4)).findAny().get();
 
-		tauxSalarialEP02 = EP02.getTauxSalarial();
+		tauxSalarialEP02 = EP02.getTauxPatronal();
+
 		montantSalarialEP02 = montantSalarial.multiply(tauxSalarialEP02);
 
 		// Calcule du Net Imposable
 		BigDecimal totalRetenueSalaire = BigDecimal.ZERO;
+
 		for (Cotisation c : cotisationsNonImp) {
-			totalRetenueSalaire.add(c.getTauxSalarial().multiply(salaireBrut));
+			if (c.getTauxSalarial() != null) {
+				totalRetenueSalaire = totalRetenueSalaire.add(salaireBrut.multiply(c.getTauxSalarial()));
+			}
 		}
+
 		netImposable = salaireBrut.subtract(totalRetenueSalaire);
 
-		Cotisation SP01 = cotisationsImposab.stream().filter(c -> c.getId().equals(1)).findAny().get();
+		Cotisation SP01 = cotisationsImposab.stream().filter(c -> c.getId().equals(3)).findAny().get();
 
 		tauxSalarialSP01 = SP01.getTauxSalarial();
 		montantSalarialSP01 = montantSalarial.multiply(tauxSalarialSP01);
 
-		Cotisation SP02 = cotisationsImposab.stream().filter(c -> c.getId().equals(2)).findAny().get();
+		Cotisation SP02 = cotisationsImposab.stream().filter(c -> c.getId().equals(3)).findAny().get();
 
 		tauxSalarialSP02 = SP02.getTauxSalarial();
+
 		montantSalarialSP02 = montantSalarial.multiply(tauxSalarialSP02);
 
 		// Calcule du Net à peyer
 		BigDecimal subtrahend = BigDecimal.ZERO;
+		netAPayer = BigDecimal.ZERO;
 		totalRetenueSalarie = BigDecimal.ZERO;
+		for (Cotisation c : cotisationsImposab) {
+			if (c.getTauxSalarial() != null) {
+				subtrahend = c.getTauxSalarial().multiply(salaireBrut);
+				netAPayer = netImposable.subtract(subtrahend);
+
+				totalRetenueSalarie = totalRetenueSalarie.add(c.getTauxSalarial());
+			}
+
+		}
+
 		totalRetenuePatronal = BigDecimal.ZERO;
 
 		for (Cotisation c : cotisationsImposab) {
-			subtrahend.add(c.getTauxSalarial().multiply(salaireBrut));
-			totalRetenueSalarie.add(c.getTauxSalarial());
-			totalRetenuePatronal.add(c.getTauxPatronal());
+			if (c.getTauxPatronal() != null) {
+
+				totalRetenuePatronal = totalRetenuePatronal.add(c.getTauxPatronal());
+			}
+
 		}
-		netAPayer = netImposable.subtract(subtrahend);
+
 	}
 
 	/**

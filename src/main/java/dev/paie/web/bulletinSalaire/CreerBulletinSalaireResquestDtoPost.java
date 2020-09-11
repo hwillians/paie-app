@@ -7,30 +7,13 @@ import com.sun.istack.NotNull;
 public class CreerBulletinSalaireResquestDtoPost {
 
 	@NotNull
-	private Integer entrepriseId;
-	@NotNull
 	private Integer perdiodeId;
+
 	@NotNull
 	private Integer profilRemunerationId;
+
 	@NotNull
 	private BigDecimal primeExetionnelle;
-
-	/**
-	 * 
-	 * /**
-	 * 
-	 * @return the entrepriseId
-	 */
-	public Integer getEntrepriseId() {
-		return entrepriseId;
-	}
-
-	/**
-	 * @param entrepriseId the entrepriseId to set
-	 */
-	public void setEntrepriseId(Integer entrepriseId) {
-		this.entrepriseId = entrepriseId;
-	}
 
 	/**
 	 * @return the perdiodeId

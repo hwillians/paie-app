@@ -1,6 +1,5 @@
 package dev.paie.web.bulletinSalaire;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,47 +8,11 @@ import com.sun.istack.NotNull;
 public class CreerBulletinSalaireResquestDtoGet {
 
 	@NotNull
-	private Integer id;
-	@NotNull
-	private Integer entrepriseId;
-	@NotNull
 	private Integer perdiodeId;
-	@NotNull
-	private Integer profilRemunerationId;
 	@NotNull
 	private LocalDate dateCreation;
 	@NotNull
-	private BigDecimal primeExetionnelle;
-	@NotNull
 	private List<String> matricules;
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the entrepriseId
-	 */
-	public Integer getEntrepriseId() {
-		return entrepriseId;
-	}
-
-	/**
-	 * @param entrepriseId the entrepriseId to set
-	 */
-	public void setEntrepriseId(Integer entrepriseId) {
-		this.entrepriseId = entrepriseId;
-	}
 
 	/**
 	 * @return the perdiodeId
@@ -63,20 +26,6 @@ public class CreerBulletinSalaireResquestDtoGet {
 	 */
 	public void setPerdiodeId(Integer perdiodeId) {
 		this.perdiodeId = perdiodeId;
-	}
-
-	/**
-	 * @return the profilRemunerationId
-	 */
-	public Integer getProfilRemunerationId() {
-		return profilRemunerationId;
-	}
-
-	/**
-	 * @param profilRemunerationId the profilRemunerationId to set
-	 */
-	public void setProfilRemunerationId(Integer profilRemunerationId) {
-		this.profilRemunerationId = profilRemunerationId;
 	}
 
 	/**
@@ -105,20 +54,6 @@ public class CreerBulletinSalaireResquestDtoGet {
 	 */
 	public void setMatricules(List<String> matricules) {
 		this.matricules = matricules;
-	}
-
-	/**
-	 * @return the primeExetionnelle
-	 */
-	public BigDecimal getPrimeExetionnelle() {
-		return primeExetionnelle;
-	}
-
-	/**
-	 * @param primeExetionnelle the primeExetionnelle to set
-	 */
-	public void setPrimeExetionnelle(BigDecimal primeExetionnelle) {
-		this.primeExetionnelle = primeExetionnelle;
 	}
 
 }

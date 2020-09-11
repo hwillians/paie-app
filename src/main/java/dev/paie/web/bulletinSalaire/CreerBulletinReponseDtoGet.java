@@ -1,7 +1,8 @@
 package dev.paie.web.bulletinSalaire;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import dev.paie.entite.BulletinSalaire;
@@ -11,7 +12,8 @@ import dev.paie.entite.Periode;
 
 public class CreerBulletinReponseDtoGet {
 
-	private LocalDateTime dateCreation;
+	private LocalDate dateCreation;
+	private LocalTime heureCreation;
 	private Periode periode;
 	private String matricule;
 	private BigDecimal salaireBrut;
@@ -30,6 +32,8 @@ public class CreerBulletinReponseDtoGet {
 
 		// ajoute de la date de creation
 		dateCreation = bs.getDateCreation();
+
+		heureCreation = bs.getHeureCreation();
 
 		// ajoute de la peride
 		periode = bs.getPeriode();
@@ -60,15 +64,29 @@ public class CreerBulletinReponseDtoGet {
 	/**
 	 * @return the dateCreation
 	 */
-	public LocalDateTime getDateCreation() {
+	public LocalDate getDateCreation() {
 		return dateCreation;
 	}
 
 	/**
 	 * @param dateCreation the dateCreation to set
 	 */
-	public void setDateCreation(LocalDateTime dateCreation) {
+	public void setDateCreation(LocalDate dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	/**
+	 * @return the heureCreation
+	 */
+	public LocalTime getHeureCreation() {
+		return heureCreation;
+	}
+
+	/**
+	 * @param heureCreation the heureCreation to set
+	 */
+	public void setHeureCreation(LocalTime heureCreation) {
+		this.heureCreation = heureCreation;
 	}
 
 	/**

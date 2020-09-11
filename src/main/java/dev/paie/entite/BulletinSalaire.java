@@ -1,7 +1,8 @@
 package dev.paie.entite;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,10 @@ public class BulletinSalaire {
 	private Periode periode;
 
 	private BigDecimal primeExceptionnelle;
-	private LocalDateTime dateCreation;
+
+	private LocalDate dateCreation;
+
+	private LocalTime heureCreation;
 
 	public RemunerationEmploye getRemunerationEmploye() {
 		return remunerationEmploye;
@@ -60,15 +64,29 @@ public class BulletinSalaire {
 	/**
 	 * @return the dateCreation
 	 */
-	public LocalDateTime getDateCreation() {
+	public LocalDate getDateCreation() {
 		return dateCreation;
 	}
 
 	/**
 	 * @param dateCreation the dateCreation to set
 	 */
-	public void setDateCreation(LocalDateTime dateCreation) {
+	public void setDateCreation(LocalDate dateCreation) {
 		this.dateCreation = dateCreation;
+	}
+
+	/**
+	 * @return the heureCreation
+	 */
+	public LocalTime getHeureCreation() {
+		return heureCreation;
+	}
+
+	/**
+	 * @param heureCreation the heureCreation to set
+	 */
+	public void setHeureCreation(LocalTime heureCreation) {
+		this.heureCreation = heureCreation;
 	}
 
 }
