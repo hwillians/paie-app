@@ -8,19 +8,20 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import dev.paie.entite.Employe;
 import dev.paie.entite.Entreprise;
 import dev.paie.entite.Grade;
 import dev.paie.entite.ProfilRemuneration;
+import dev.paie.entite.RemunerationEmploye;
 import dev.paie.exception.PaieException;
-import dev.paie.repositories.EmployeRepository;
 import dev.paie.repositories.EntrepriseRepository;
+import dev.paie.repositories.GradeReposirtory;
 import dev.paie.repositories.ProfilRemuneratioRepository;
+import dev.paie.repositories.RemunerationEmployeRepository;
 
 @Service
-public class EmployeService {
+public class RemunerationEmployeService {
 
-	private EmployeRepository employeRepository;
+	private RemunerationEmployeRepository employeRepository;
 	private EntrepriseRepository entRep;
 	private ProfilRemuneratioRepository pRep;
 	private GradeReposirtory gRep;
@@ -31,7 +32,7 @@ public class EmployeService {
 	 * @param pRep
 	 * @param gRep
 	 */
-	public EmployeService(EmployeRepository employeRepository, EntrepriseRepository entRep,
+	public RemunerationEmployeService(RemunerationEmployeRepository employeRepository, EntrepriseRepository entRep,
 			ProfilRemuneratioRepository pRep, GradeReposirtory gRep) {
 		this.employeRepository = employeRepository;
 		this.entRep = entRep;
@@ -40,17 +41,13 @@ public class EmployeService {
 	}
 
 	@Transactional
-	public Employe creerEmploye(Integer matricule, Integer entrepriseId, Integer profilId, Integer gradeId) {
+	public RemunerationEmploye creerEmploye(String matricule, Integer entrepriseId, Integer profilId, Integer gradeId) {
 
 		List<String> messagesErreurs = new ArrayList<>();
 
 		Optional<Entreprise> opEntreprise = entRep.findById(entrepriseId);
 		Optional<ProfilRemuneration> opProfilRem = pRep.findById(profilId);
 		Optional<Grade> opGrade = gRep.findById(gradeId);
-
-		if (!employeRepository.findByMatricule(matricule).isEmpty()) {
-			messagesErreurs.add("La matricule est déjà asignée à une autre employé");
-		}
 
 		if (opEntreprise.isEmpty()) {
 			messagesErreurs.add("L'id" + entrepriseId + " ne correspond à aucune Entreprise");
@@ -67,7 +64,7 @@ public class EmployeService {
 			throw new PaieException(messagesErreurs);
 		}
 
-		Employe emp = new Employe();
+		RemunerationEmploye emp = new RemunerationEmploye();
 		emp.setMatricule(matricule);
 		emp.setEntreprise(opEntreprise.get());
 		emp.setProfilRemuneration(opProfilRem.get());

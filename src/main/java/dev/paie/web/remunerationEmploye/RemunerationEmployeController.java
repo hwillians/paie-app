@@ -1,4 +1,4 @@
-package dev.paie.web.employe;
+package dev.paie.web.remunerationEmploye;
 
 import java.util.List;
 
@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.paie.entite.Employe;
+import dev.paie.entite.RemunerationEmploye;
 import dev.paie.exception.PaieException;
-import dev.paie.services.EmployeService;
+import dev.paie.services.RemunerationEmployeService;
 
 @RestController
 @RequestMapping("employes")
-public class EmployeController {
+public class RemunerationEmployeController {
 
-	private EmployeService eServ;
+	private RemunerationEmployeService eServ;
 
 	/**
 	 * @param eServ
 	 */
-	public EmployeController(EmployeService eServ) {
+	public RemunerationEmployeController(RemunerationEmployeService eServ) {
 		this.eServ = eServ;
 	}
 
 	@PostMapping
-	public ResponseEntity<?> creerEmploye(@RequestBody CreerEmployeResquestDto employeRq, BindingResult resValid) {
+	public ResponseEntity<?> creerEmploye(@RequestBody CreerRemunerationEmployeResquestDto employeRq, BindingResult resValid) {
 
 		if (!resValid.hasErrors()) {
-			Employe EmployeServ = eServ.creerEmploye(employeRq.getMatricule(), employeRq.getEntrepriseId(),
+			RemunerationEmploye EmployeServ = eServ.creerEmploye(employeRq.getMatricule(), employeRq.getEntrepriseId(),
 					employeRq.getProfilId(), employeRq.getGradeId());
 
-			CreerEmployeReponseDto employeRep = new CreerEmployeReponseDto(EmployeServ);
+			CreerRemunerationEmployeReponseDto employeRep = new CreerRemunerationEmployeReponseDto(EmployeServ);
 			return ResponseEntity.ok(employeRep);
 		} else {
 			return ResponseEntity.badRequest().body("tous les champs sont obligatoires ! ");

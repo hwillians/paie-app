@@ -9,6 +9,7 @@ public class RemunerationEmploye {
 
 	@Id
 	private Integer id;
+
 	private String matricule;
 	@ManyToOne
 	private Entreprise entreprise;
