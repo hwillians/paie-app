@@ -9,7 +9,7 @@ import dev.paie.entite.Cotisation;
 import dev.paie.entite.Grade;
 import dev.paie.entite.Periode;
 
-public class CreerBulletinReponseDto {
+public class CreerBulletinReponseDtoGet {
 
 	private LocalDateTime dateCreation;
 	private Periode periode;
@@ -25,11 +25,11 @@ public class CreerBulletinReponseDto {
 	 * @param cotisationsNonImp
 	 * @param cotisationsImposab
 	 */
-	public CreerBulletinReponseDto(BulletinSalaire bs, Grade grade, String matricule,
+	public CreerBulletinReponseDtoGet(BulletinSalaire bs, Grade grade, String matricule,
 			List<Cotisation> cotisationsNonImp, List<Cotisation> cotisationsImposab) {
 
 		// ajoute de la date de creation
-		dateCreation = LocalDateTime.now();
+		dateCreation = bs.getDateCreation();
 
 		// ajoute de la peride
 		periode = bs.getPeriode();

@@ -13,9 +13,9 @@ import dev.paie.entite.Grade;
 public interface BulletinRepositorie extends JpaRepository<BulletinSalaire, Integer> {
 
 	@Query("select b from BulletinSalaire b join fetch b.periode p join fetch b.remunerationEmploye r "
-			+ "where b.dateCreation =  ?1 " + "and p.dateDebut > ?2 and p.dateFin <?3" + "and r.matricule = ?4")
-	List<BulletinSalaire> findAllByDateCreationAndPeriodeAndMatricules(LocalDate date, LocalDate debutPeriode,
-			LocalDate finPeriode, List<String> matricules);
+			+ "where b.dateCreation = ?1 and p.id = ?2 and r.matricule = ?3")
+	List<BulletinSalaire> findAllByDateCreationAndPeriodeAndMatricules(LocalDate date, Integer periodeId,
+			List<String> matricules);
 
 	@Query("select b from BulletinSalaire b join fetch b.remunerationEmploye r join fetch r.grade where b.id = ?1")
 	Grade findGradeByBulletinId(Integer id);
