@@ -79,6 +79,7 @@ public class BulletinService {
 		Optional<BulletinSalaire> opt = bullRep.findRemunerationEmployeByBulletinId(id);
 
 		return opt.orElseThrow().getRemunerationEmploye().getEntreprise();
+
 	}
 
 	@Transactional
@@ -88,11 +89,13 @@ public class BulletinService {
 		List<String> messagesErreurs = new ArrayList<>();
 
 		Optional<RemunerationEmploye> opEmp = empRep.findById(profilRemunerationId);
+
 		if (opEmp.isEmpty()) {
 			messagesErreurs.add("L'id " + profilRemunerationId + " ne correspond à aucun profil de Remuneration");
 		}
 
 		Optional<Periode> opPeriode = periodeRep.findById(perdiodeId);
+
 		if (opPeriode.isEmpty()) {
 			messagesErreurs.add("L'id " + perdiodeId + " ne correspond à aucune periode enregistrée");
 		}
