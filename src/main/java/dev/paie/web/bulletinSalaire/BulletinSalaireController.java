@@ -43,6 +43,18 @@ public class BulletinSalaireController {
 		this.profilRep = profilRep;
 	}
 
+	/*
+	 * notetion JSON
+	 * 
+	 * { "dateCreation": "2020-09-12",
+	 * 
+	 * "perdiodeId": "1",
+	 * 
+	 * "matricules": [
+	 * 
+	 * "M0111" ] }
+	 */
+
 	@GetMapping
 	public List<CreerBulletinReponseDtoGet> listerBulletins(
 			@Valid @RequestBody CreerBulletinSalaireResquestDtoGet bullRq, BindingResult resValid) {
