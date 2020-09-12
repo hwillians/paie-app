@@ -2,17 +2,17 @@ package dev.paie.web.bulletinSalaire;
 
 import java.math.BigDecimal;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class CreerBulletinSalaireResquestDtoPost {
 
-	@NotNull
+	@NotBlank
 	private Integer perdiodeId;
 
-	@NotNull
-	private Integer profilRemunerationId;
+	@NotBlank
+	private Integer remunerationEmployeId;
 
-	@NotNull
+	@NotBlank
 	private BigDecimal primeExetionnelle;
 
 	/**
@@ -30,17 +30,17 @@ public class CreerBulletinSalaireResquestDtoPost {
 	}
 
 	/**
-	 * @return the profilRemunerationId
+	 * @return the remunerationEmployeId
 	 */
-	public Integer getProfilRemunerationId() {
-		return profilRemunerationId;
+	public Integer getRemunerationEmployeId() {
+		return remunerationEmployeId;
 	}
 
 	/**
-	 * @param profilRemunerationId the profilRemunerationId to set
+	 * @param remunerationEmployeId the remunerationEmployeId to set
 	 */
-	public void setProfilRemunerationId(Integer profilRemunerationId) {
-		this.profilRemunerationId = profilRemunerationId;
+	public void setRemunerationEmployeId(Integer remunerationEmployeId) {
+		this.remunerationEmployeId = remunerationEmployeId;
 	}
 
 	/**

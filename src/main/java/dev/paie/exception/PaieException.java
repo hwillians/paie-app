@@ -2,8 +2,8 @@ package dev.paie.exception;
 
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class PaieException extends RuntimeException {
+
 	private List<String> messagesErreurs;
 
 	/**
@@ -18,13 +18,6 @@ public class PaieException extends RuntimeException {
 	 */
 	public List<String> getMessagesErreurs() {
 		return messagesErreurs;
-	}
-
-	/**
-	 * @param messagesErreurs the messagesErreurs to set
-	 */
-	public void setMessagesErreurs(List<String> messagesErreurs) {
-		this.messagesErreurs = messagesErreurs;
 	}
 
 }

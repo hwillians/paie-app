@@ -1,19 +1,21 @@
 package dev.paie.web.remunerationEmploye;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class CreerRemunerationEmployeResquestDto {
 
-	@NotNull
+	@NotBlank
+	@Size(min = 5)
 	private String matricule;
 
-	@NotNull
+	@NotBlank
 	private Integer entrepriseId;
 
-	@NotNull
+	@NotBlank
 	private Integer profilId;
 
-	@NotNull
+	@NotBlank
 	private Integer gradeId;
 
 	/**

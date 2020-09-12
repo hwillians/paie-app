@@ -29,30 +29,11 @@ public class BulletinSalaire {
 
 	private LocalTime heureCreation;
 
-	/**
-	 * 
-	 */
-	public BulletinSalaire() {
-	}
-
 	@Override
 	public String toString() {
-		return "BulletinSalaire [id=" + id + ", remunerationEmploye=" + remunerationEmploye + ", periode=" + periode
-				+ ", primeExceptionnelle=" + primeExceptionnelle + ", dateCreation=" + dateCreation + "]";
-	}
-
-	/**
-	 * @param remunerationEmploye
-	 * @param periode
-	 * @param primeExceptionnelle
-	 * @param dateCreation
-	 */
-	public BulletinSalaire(RemunerationEmploye remunerationEmploye, Periode periode, BigDecimal primeExceptionnelle,
-			LocalDate dateCreation) {
-		this.remunerationEmploye = remunerationEmploye;
-		this.periode = periode;
-		this.primeExceptionnelle = primeExceptionnelle;
-		this.dateCreation = dateCreation;
+		return "BulletinSalaire N° " + id + "  remunerationEmploye=" + remunerationEmploye.getMatricule()
+				+ ", periode [ du" + periode.getDateDebut() + "au" + periode.getDateFin() + "], dateCreation="
+				+ dateCreation + "]";
 	}
 
 	public RemunerationEmploye getRemunerationEmploye() {

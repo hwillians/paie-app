@@ -10,19 +10,18 @@ import dev.paie.repositories.EntrepriseRepository;
 @Service
 public class EntrepriseService {
 
-	private EntrepriseRepository entRep;
+	private EntrepriseRepository entrepriseRpository;
 
 	/**
 	 * @param entRep
 	 */
-	public EntrepriseService(EntrepriseRepository entRep) {
-		this.entRep = entRep;
+	public EntrepriseService(EntrepriseRepository entrepriseRpository) {
+		this.entrepriseRpository = entrepriseRpository;
 	}
 
 	@Transactional
 	public Entreprise getEnterprise(Integer entrepriseId) {
-
-		return entRep.getOne(entrepriseId);
+		return entrepriseRpository.getOne(entrepriseId);
 	}
 
 }

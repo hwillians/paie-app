@@ -3,16 +3,20 @@ package dev.paie.web.bulletinSalaire;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class CreerBulletinSalaireResquestDtoGet {
 
-	@NotNull
+	@NotBlank
 	private Integer perdiodeId;
-	@NotNull
+
+	@NotBlank
 	private LocalDate dateCreation;
-	@NotNull
-	private List<String> matricules;
+
+	@NotEmpty
+	private List<@NotBlank @Size(min = 5) String> matricules;
 
 	/**
 	 * @return the perdiodeId

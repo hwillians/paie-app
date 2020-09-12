@@ -1,0 +1,14 @@
+Example des données au format JSON pouvant alimenter l'écran GtET/list de bulletins.
+
+{
+     "dateCreation": "2020-09-12",
+	
+	 "perdiodeId": "1",
+
+    "matricules": [
+     
+      "M0111",
+      "M0112"
+       
+    ]
+}

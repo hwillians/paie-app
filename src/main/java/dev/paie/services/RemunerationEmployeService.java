@@ -14,17 +14,17 @@ import dev.paie.entite.ProfilRemuneration;
 import dev.paie.entite.RemunerationEmploye;
 import dev.paie.exception.PaieException;
 import dev.paie.repositories.EntrepriseRepository;
-import dev.paie.repositories.GradeReposirtory;
-import dev.paie.repositories.ProfilRemuneratioRepository;
+import dev.paie.repositories.GradeRepository;
+import dev.paie.repositories.ProfilRemunerationRepository;
 import dev.paie.repositories.RemunerationEmployeRepository;
 
 @Service
 public class RemunerationEmployeService {
 
 	private RemunerationEmployeRepository employeRepository;
-	private EntrepriseRepository entRep;
-	private ProfilRemuneratioRepository pRep;
-	private GradeReposirtory gRep;
+	private EntrepriseRepository entrepiseRepository;
+	private ProfilRemunerationRepository profilRepository;
+	private GradeRepository gradeRepository;
 
 	/**
 	 * @param employeRepository
@@ -32,12 +32,13 @@ public class RemunerationEmployeService {
 	 * @param pRep
 	 * @param gRep
 	 */
-	public RemunerationEmployeService(RemunerationEmployeRepository employeRepository, EntrepriseRepository entRep,
-			ProfilRemuneratioRepository pRep, GradeReposirtory gRep) {
+	public RemunerationEmployeService(RemunerationEmployeRepository employeRepository,
+			EntrepriseRepository entrepiseRepository, ProfilRemunerationRepository profilRepository,
+			GradeRepository gradeRepository) {
 		this.employeRepository = employeRepository;
-		this.entRep = entRep;
-		this.pRep = pRep;
-		this.gRep = gRep;
+		this.entrepiseRepository = entrepiseRepository;
+		this.profilRepository = profilRepository;
+		this.gradeRepository = gradeRepository;
 	}
 
 	@Transactional
@@ -45,9 +46,9 @@ public class RemunerationEmployeService {
 
 		List<String> messagesErreurs = new ArrayList<>();
 
-		Optional<Entreprise> opEntreprise = entRep.findById(entrepriseId);
-		Optional<ProfilRemuneration> opProfilRem = pRep.findById(profilId);
-		Optional<Grade> opGrade = gRep.findById(gradeId);
+		Optional<Entreprise> opEntreprise = entrepiseRepository.findById(entrepriseId);
+		Optional<ProfilRemuneration> opProfilRem = profilRepository.findById(profilId);
+		Optional<Grade> opGrade = gradeRepository.findById(gradeId);
 
 		if (opEntreprise.isEmpty()) {
 			messagesErreurs.add("L'id" + entrepriseId + " ne correspond à aucune Entreprise");

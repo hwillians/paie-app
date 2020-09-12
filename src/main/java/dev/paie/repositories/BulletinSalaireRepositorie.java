@@ -12,7 +12,7 @@ import dev.paie.entite.BulletinSalaire;
 public interface BulletinSalaireRepositorie extends JpaRepository<BulletinSalaire, Integer> {
 
 	@Query("select b from BulletinSalaire b join fetch b.periode p join fetch b.remunerationEmploye r "
-			+ "where b.dateCreation = ?1 and p.id = ?2 and r.matricule like ?3")
+			+ "where b.dateCreation = ?1 and p.id = ?2 and r.matricule in ?3")
 	List<BulletinSalaire> findAllByDateCreationAndPeriodeAndMatricules(LocalDate date, Integer periodeId,
 			List<String> matricules);
 
@@ -27,7 +27,7 @@ public interface BulletinSalaireRepositorie extends JpaRepository<BulletinSalair
 	Optional<BulletinSalaire> findCotisationsImp(Integer id);
 
 	@Query("select b from BulletinSalaire b join fetch b.remunerationEmploye r join fetch r.profilRemuneration p "
-			+ "join fetch p.cotisations c where b.id =?1 and c.imposable = 1")
+			+ "join fetch p.cotisations c where b.id =?1 and c.imposable <> 0")
 	Optional<BulletinSalaire> findCotisationsNonImp(Integer id);
 
 }

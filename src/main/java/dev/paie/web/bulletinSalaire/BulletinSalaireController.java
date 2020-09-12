@@ -19,32 +19,33 @@ import dev.paie.entite.BulletinSalaire;
 import dev.paie.entite.Cotisation;
 import dev.paie.entite.Entreprise;
 import dev.paie.entite.Grade;
-import dev.paie.entite.ProfilRemuneration;
+import dev.paie.entite.RemunerationEmploye;
 import dev.paie.exception.PaieException;
-import dev.paie.repositories.ProfilRemunerationRepository;
-import dev.paie.services.BulletinService;
+import dev.paie.repositories.RemunerationEmployeRepository;
+import dev.paie.services.BulletinSalaireService;
 
 @RestController
 @RequestMapping("bulletins")
 public class BulletinSalaireController {
 
-	private BulletinService bullServ;
+	private BulletinSalaireService bulletinSalaireService;
 
-	private ProfilRemunerationRepository profilRep;
+	private RemunerationEmployeRepository remunerationEmployeRepository;
 
 	/**
 	 * @param bullServ
 	 * @param entServ
 	 * @param profilRep
 	 */
-	public BulletinSalaireController(BulletinService bullServ, ProfilRemunerationRepository profilRep) {
-		this.bullServ = bullServ;
+	public BulletinSalaireController(BulletinSalaireService bulletinSalaireService,
+			RemunerationEmployeRepository remunerationEmployeRepository) {
+		this.bulletinSalaireService = bulletinSalaireService;
 
-		this.profilRep = profilRep;
+		this.remunerationEmployeRepository = remunerationEmployeRepository;
 	}
 
 	/*
-	 * notetion JSON
+	 * notation JSON
 	 * 
 	 * { "dateCreation": "2020-09-12",
 	 * 
@@ -56,54 +57,61 @@ public class BulletinSalaireController {
 	 */
 
 	@GetMapping
-	public List<CreerBulletinReponseDtoGet> listerBulletins(
-			@Valid @RequestBody CreerBulletinSalaireResquestDtoGet bullRq, BindingResult resValid) {
+	public List<CreerBulletinSalaireReponseDtoGet> listerBulletins(
+			@RequestBody @Valid CreerBulletinSalaireResquestDtoGet bullRq, BindingResult resValid) {
 
-		List<BulletinSalaire> listBulletin = bullServ.listerBulletins(bullRq.getDateCreation(), bullRq.getPerdiodeId(),
-				bullRq.getMatricules());
+		List<BulletinSalaire> listeBulletins = bulletinSalaireService.listerBulletins(bullRq.getDateCreation(),
+				bullRq.getPerdiodeId(), bullRq.getMatricules());
 
-		List<CreerBulletinReponseDtoGet> listBulletinRep = new ArrayList<>();
-		for (BulletinSalaire bs : listBulletin) {
+		List<CreerBulletinSalaireReponseDtoGet> listBulletinRep = new ArrayList<>();
+		for (BulletinSalaire bs : listeBulletins) {
 
-			Grade grade = bullServ.getGrade(bs.getId());
-			String matricule = bullServ.getMatricule(bs.getId());
-			List<Cotisation> CotisationsNonImp = bullServ.listerCotisationNonImp(bs.getId());
-			List<Cotisation> CotisationsImposab = bullServ.listerCotisationImposable(bs.getId());
-			listBulletinRep
-					.add(new CreerBulletinReponseDtoGet(bs, grade, matricule, CotisationsNonImp, CotisationsImposab));
+			Grade grade = bulletinSalaireService.getGrade(bs.getId());
+			String matricule = bulletinSalaireService.getMatricule(bs.getId());
+			List<Cotisation> CotisationsNonImp = bulletinSalaireService.listerCotisationNonImp(bs.getId());
+			List<Cotisation> CotisationsImposab = bulletinSalaireService.listerCotisationImposable(bs.getId());
+			listBulletinRep.add(
+					new CreerBulletinSalaireReponseDtoGet(bs, grade, matricule, CotisationsNonImp, CotisationsImposab));
 		}
 		return listBulletinRep;
 	}
 
 	@PostMapping
-	public ResponseEntity<?> creerBulletins(@Valid @RequestBody CreerBulletinSalaireResquestDtoPost bullRq,
+	public ResponseEntity<?> creerBulletins(@RequestBody @Valid CreerBulletinSalaireResquestDtoPost bullRq,
 			BindingResult resValid) {
 
 		if (!resValid.hasErrors()) {
 
-			BulletinSalaire bulletin = bullServ.creerBulletin(bullRq.getPerdiodeId(), bullRq.getProfilRemunerationId(),
-					bullRq.getPrimeExetionnelle());
+			BulletinSalaire bulletin = bulletinSalaireService.creerBulletin(bullRq.getPerdiodeId(),
+					bullRq.getRemunerationEmployeId(), bullRq.getPrimeExetionnelle());
 
-			Optional<ProfilRemuneration> opProfilNomImp = profilRep
-					.listerCotisationNonImp(bullRq.getProfilRemunerationId());
-			List<Cotisation> CotisationsNonImp = opProfilNomImp.get().getCotisations();
+			Optional<RemunerationEmploye> optionalRemunerationNonImp = remunerationEmployeRepository
+					.listerCotisationNonImp(bullRq.getRemunerationEmployeId());
 
-			Optional<ProfilRemuneration> opProfilImp = profilRep
-					.listerCotisationImposable(bullRq.getProfilRemunerationId());
-			List<Cotisation> CotisationsImposab = opProfilImp.get().getCotisations();
+			List<Cotisation> CotisationsNonImp = optionalRemunerationNonImp
+					.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations Imposables"))
+					.getProfilRemuneration().getCotisations();
 
-			Grade grade = bullServ.getGrade(bulletin.getId());
+			Optional<RemunerationEmploye> optinalRemunerationImposable = remunerationEmployeRepository
+					.listerCotisationImposable(bullRq.getRemunerationEmployeId());
 
-			String matricule = bullServ.getMatricule(bulletin.getId());
+			List<Cotisation> CotisationsImposab = optinalRemunerationImposable
+					.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations non Imposables"))
+					.getProfilRemuneration().getCotisations();
+			System.out.println(CotisationsImposab.size());
 
-			Entreprise entreprise = bullServ.getEnterprise(bulletin.getId());
+			Grade grade = bulletinSalaireService.getGrade(bulletin.getId());
 
-			CreerBulletinReponseDtoPost bulletinPost = new CreerBulletinReponseDtoPost(bulletin, grade, matricule,
-					entreprise, CotisationsNonImp, CotisationsImposab);
+			String matricule = bulletinSalaireService.getMatricule(bulletin.getId());
+
+			Entreprise entreprise = bulletinSalaireService.getEnterprise(bulletin.getId());
+
+			CreerBulletinSalaireReponseDtoPost bulletinPost = new CreerBulletinSalaireReponseDtoPost(bulletin, grade,
+					matricule, entreprise, CotisationsNonImp, CotisationsImposab);
 			return ResponseEntity.ok(bulletinPost);
 
 		} else {
-			return ResponseEntity.badRequest().body("tous les champs sont obligatoires ! ");
+			return ResponseEntity.badRequest().body("tous les champs sont obligatoires !");
 		}
 	}
 
