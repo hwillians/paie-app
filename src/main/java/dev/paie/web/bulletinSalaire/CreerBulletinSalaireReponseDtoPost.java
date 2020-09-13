@@ -47,8 +47,6 @@ public class CreerBulletinSalaireReponseDtoPost {
 	public CreerBulletinSalaireReponseDtoPost(BulletinSalaire bs, Grade grade, String matricule, Entreprise entreprise,
 			List<Cotisation> cotisationsNonImp, List<Cotisation> cotisationsImposab) {
 
-		System.out.println(cotisationsNonImp.size());
-		System.out.println(cotisationsImposab.size());
 		// ajoute de la peride
 		debutPeriode = bs.getPeriode().getDateDebut();
 		fintPeriode = bs.getPeriode().getDateFin();
@@ -99,13 +97,13 @@ public class CreerBulletinSalaireReponseDtoPost {
 
 		netImposable = salaireBrut.subtract(totalRetenueSalaire);
 
-		Cotisation SP01 = cotisationsImposab.stream().filter(c -> c.getId().equals(3)).findAny().get();
+		Cotisation SP01 = cotisationsImposab.stream().filter(c -> c.getId().equals(1)).findAny().get();
 
 		tauxSalarialSP01 = SP01.getTauxSalarial() == null ? BigDecimal.ZERO : SP01.getTauxSalarial();
 
 		montantSalarialSP01 = montantSalarial.multiply(tauxSalarialSP01);
 		System.out.println("SP01.getTauxSalarial() " + SP01.getTauxSalarial());
-		Cotisation SP02 = cotisationsImposab.stream().filter(c -> c.getId().equals(4)).findAny().get();
+		Cotisation SP02 = cotisationsImposab.stream().filter(c -> c.getId().equals(2)).findAny().get();
 
 		tauxSalarialSP02 = SP02.getTauxSalarial() == null ? BigDecimal.ZERO : SP02.getTauxSalarial();
 		System.out.println("SP02.getTauxSalarial() " + SP02.getTauxSalarial());

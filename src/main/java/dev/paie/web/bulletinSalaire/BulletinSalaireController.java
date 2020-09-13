@@ -85,20 +85,8 @@ public class BulletinSalaireController {
 			BulletinSalaire bulletin = bulletinSalaireService.creerBulletin(bullRq.getPerdiodeId(),
 					bullRq.getRemunerationEmployeId(), bullRq.getPrimeExetionnelle());
 
-			Optional<RemunerationEmploye> optionalRemunerationNonImp = remunerationEmployeRepository
-					.listerCotisationNonImp(bullRq.getRemunerationEmployeId());
-
-			List<Cotisation> CotisationsNonImp = optionalRemunerationNonImp
-					.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations Imposables"))
-					.getProfilRemuneration().getCotisations();
-
-			Optional<RemunerationEmploye> optinalRemunerationImposable = remunerationEmployeRepository
-					.listerCotisationImposable(bullRq.getRemunerationEmployeId());
-
-			List<Cotisation> CotisationsImposab = optinalRemunerationImposable
-					.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations non Imposables"))
-					.getProfilRemuneration().getCotisations();
-			System.out.println(CotisationsImposab.size());
+			List<Cotisation> CotisationsNonImp = ListerCotisations(bullRq, false);
+			List<Cotisation> CotisationsImpossable = ListerCotisations(bullRq, true);
 
 			Grade grade = bulletinSalaireService.getGrade(bulletin.getId());
 
@@ -107,12 +95,26 @@ public class BulletinSalaireController {
 			Entreprise entreprise = bulletinSalaireService.getEnterprise(bulletin.getId());
 
 			CreerBulletinSalaireReponseDtoPost bulletinPost = new CreerBulletinSalaireReponseDtoPost(bulletin, grade,
-					matricule, entreprise, CotisationsNonImp, CotisationsImposab);
+					matricule, entreprise, CotisationsNonImp, CotisationsImpossable);
 			return ResponseEntity.ok(bulletinPost);
 
 		} else {
 			return ResponseEntity.badRequest().body("tous les champs sont obligatoires !");
 		}
+	}
+
+	/**
+	 * @param bullRq
+	 * @return
+	 */
+	public List<Cotisation> ListerCotisations(CreerBulletinSalaireResquestDtoPost bullRq, Boolean b) {
+		Optional<RemunerationEmploye> listeCotisationsNonImp = remunerationEmployeRepository
+				.listerCotisations(bullRq.getRemunerationEmployeId(), b);
+
+		List<Cotisation> CotisationsNonImp = listeCotisationsNonImp
+				.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations Imposables"))
+				.getProfilRemuneration().getCotisations();
+		return CotisationsNonImp;
 	}
 
 	@ExceptionHandler(PaieException.class)
