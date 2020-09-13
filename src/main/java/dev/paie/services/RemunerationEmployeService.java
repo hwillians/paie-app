@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import dev.paie.entite.Cotisation;
 import dev.paie.entite.Entreprise;
 import dev.paie.entite.Grade;
 import dev.paie.entite.ProfilRemuneration;
@@ -21,7 +22,7 @@ import dev.paie.repositories.RemunerationEmployeRepository;
 @Service
 public class RemunerationEmployeService {
 
-	private RemunerationEmployeRepository employeRepository;
+	private RemunerationEmployeRepository remunerationEmployeRepository;
 	private EntrepriseRepository entrepiseRepository;
 	private ProfilRemunerationRepository profilRepository;
 	private GradeRepository gradeRepository;
@@ -35,7 +36,7 @@ public class RemunerationEmployeService {
 	public RemunerationEmployeService(RemunerationEmployeRepository employeRepository,
 			EntrepriseRepository entrepiseRepository, ProfilRemunerationRepository profilRepository,
 			GradeRepository gradeRepository) {
-		this.employeRepository = employeRepository;
+		this.remunerationEmployeRepository = employeRepository;
 		this.entrepiseRepository = entrepiseRepository;
 		this.profilRepository = profilRepository;
 		this.gradeRepository = gradeRepository;
@@ -71,7 +72,13 @@ public class RemunerationEmployeService {
 		emp.setProfilRemuneration(opProfilRem.get());
 		emp.setGrade(opGrade.get());
 
-		return employeRepository.save(emp);
+		return remunerationEmployeRepository.save(emp);
+	}
+
+	public List<Cotisation> listerCotisation(Integer remunerationEmployeId) {
+		return remunerationEmployeRepository.listerCotisations(remunerationEmployeId)
+				.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations")).getProfilRemuneration()
+				.getCotisations();
 	}
 
 }

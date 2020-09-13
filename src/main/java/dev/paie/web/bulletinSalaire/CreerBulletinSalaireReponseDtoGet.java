@@ -49,7 +49,9 @@ public class CreerBulletinSalaireReponseDtoGet {
 		// Calcule du Net Imposable
 		BigDecimal totalRetenueSalaire = BigDecimal.ZERO;
 		for (Cotisation c : cotisationsNonImp) {
-			totalRetenueSalaire.add(c.getTauxSalarial().multiply(salaireBrut));
+			if (c.getTauxSalarial() != null) {
+				totalRetenueSalaire.add(c.getTauxSalarial().multiply(salaireBrut));
+			}
 		}
 		netImposable = salaireBrut.subtract(totalRetenueSalaire);
 

@@ -23,11 +23,7 @@ public interface BulletinSalaireRepositorie extends JpaRepository<BulletinSalair
 	Optional<BulletinSalaire> findRemunerationEmployeByBulletinId(Integer id);
 
 	@Query("select b from BulletinSalaire b join fetch b.remunerationEmploye r join fetch r.profilRemuneration p "
-			+ "join fetch p.cotisations c where b.id =?1 and c.imposable = 0")
-	Optional<BulletinSalaire> findCotisationsImp(Integer id);
-
-	@Query("select b from BulletinSalaire b join fetch b.remunerationEmploye r join fetch r.profilRemuneration p "
-			+ "join fetch p.cotisations c where b.id =?1 and c.imposable <> 0")
-	Optional<BulletinSalaire> findCotisationsNonImp(Integer id);
+			+ "join fetch p.cotisations c where b.id =?1")
+	Optional<BulletinSalaire> findCotisations(Integer id);
 
 }

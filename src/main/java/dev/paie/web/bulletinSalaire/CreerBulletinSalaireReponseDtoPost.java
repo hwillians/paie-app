@@ -83,7 +83,7 @@ public class CreerBulletinSalaireReponseDtoPost {
 		Cotisation EP02 = cotisationsNonImp.stream().filter(c -> c.getId().equals(4)).findAny().get();
 
 		tauxSalarialEP02 = EP02.getTauxSalarial() == null ? BigDecimal.ZERO : EP02.getTauxSalarial();
-		System.out.println(EP02.getTauxSalarial());
+
 		montantSalarialEP02 = montantSalarial.multiply(tauxSalarialEP02);
 
 		// Calcule du Net Imposable
@@ -102,11 +102,10 @@ public class CreerBulletinSalaireReponseDtoPost {
 		tauxSalarialSP01 = SP01.getTauxSalarial() == null ? BigDecimal.ZERO : SP01.getTauxSalarial();
 
 		montantSalarialSP01 = montantSalarial.multiply(tauxSalarialSP01);
-		System.out.println("SP01.getTauxSalarial() " + SP01.getTauxSalarial());
+
 		Cotisation SP02 = cotisationsImposab.stream().filter(c -> c.getId().equals(2)).findAny().get();
 
 		tauxSalarialSP02 = SP02.getTauxSalarial() == null ? BigDecimal.ZERO : SP02.getTauxSalarial();
-		System.out.println("SP02.getTauxSalarial() " + SP02.getTauxSalarial());
 
 		montantSalarialSP02 = montantSalarial.multiply(tauxSalarialSP02);
 

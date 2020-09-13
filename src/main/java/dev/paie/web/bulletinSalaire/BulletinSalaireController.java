@@ -2,7 +2,6 @@ package dev.paie.web.bulletinSalaire;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,41 +18,47 @@ import dev.paie.entite.BulletinSalaire;
 import dev.paie.entite.Cotisation;
 import dev.paie.entite.Entreprise;
 import dev.paie.entite.Grade;
-import dev.paie.entite.RemunerationEmploye;
 import dev.paie.exception.PaieException;
-import dev.paie.repositories.RemunerationEmployeRepository;
 import dev.paie.services.BulletinSalaireService;
+import dev.paie.services.RemunerationEmployeService;
 
 @RestController
 @RequestMapping("bulletins")
 public class BulletinSalaireController {
 
 	private BulletinSalaireService bulletinSalaireService;
-
-	private RemunerationEmployeRepository remunerationEmployeRepository;
+	private RemunerationEmployeService remunerationEmployeService;
 
 	/**
-	 * @param bullServ
-	 * @param entServ
-	 * @param profilRep
+	 * @param bulletinSalaireService
+	 * @param remunerationEmployeService
 	 */
 	public BulletinSalaireController(BulletinSalaireService bulletinSalaireService,
-			RemunerationEmployeRepository remunerationEmployeRepository) {
+			RemunerationEmployeService remunerationEmployeService) {
 		this.bulletinSalaireService = bulletinSalaireService;
-
-		this.remunerationEmployeRepository = remunerationEmployeRepository;
+		this.remunerationEmployeService = remunerationEmployeService;
 	}
 
 	/*
 	 * notation JSON
 	 * 
-	 * { "dateCreation": "2020-09-12",
+	 * {
+	 * 
+	 * "dateCreation": "2020-09-12",
 	 * 
 	 * "perdiodeId": "1",
 	 * 
-	 * "matricules": [
+	 * "matricules":
 	 * 
-	 * "M0111" ] }
+	 * [
+	 * 
+	 * "M0111",
+	 * 
+	 * "M0112"
+	 * 
+	 * ]
+	 * 
+	 * }
 	 */
 
 	@GetMapping
@@ -68,11 +73,25 @@ public class BulletinSalaireController {
 
 			Grade grade = bulletinSalaireService.getGrade(bs.getId());
 			String matricule = bulletinSalaireService.getMatricule(bs.getId());
-			List<Cotisation> CotisationsNonImp = bulletinSalaireService.listerCotisationNonImp(bs.getId());
-			List<Cotisation> CotisationsImposab = bulletinSalaireService.listerCotisationImposable(bs.getId());
-			listBulletinRep.add(
-					new CreerBulletinSalaireReponseDtoGet(bs, grade, matricule, CotisationsNonImp, CotisationsImposab));
+
+			List<Cotisation> listeCotisations = bulletinSalaireService.listerCotisation(bs.getId());
+			List<Cotisation> listecotisationsNonImposables = new ArrayList<Cotisation>();
+			List<Cotisation> listecotisationsImposables = new ArrayList<Cotisation>();
+
+			for (Cotisation c : listeCotisations) {
+
+				if (c.getImposable() == false) {
+					listecotisationsNonImposables.add(c);
+				} else {
+					listecotisationsImposables.add(c);
+				}
+			}
+
+			listBulletinRep.add(new CreerBulletinSalaireReponseDtoGet(bs, grade, matricule,
+					listecotisationsNonImposables, listecotisationsImposables));
+
 		}
+
 		return listBulletinRep;
 	}
 
@@ -85,8 +104,17 @@ public class BulletinSalaireController {
 			BulletinSalaire bulletin = bulletinSalaireService.creerBulletin(bullRq.getPerdiodeId(),
 					bullRq.getRemunerationEmployeId(), bullRq.getPrimeExetionnelle());
 
-			List<Cotisation> CotisationsNonImp = ListerCotisations(bullRq, false);
-			List<Cotisation> CotisationsImpossable = ListerCotisations(bullRq, true);
+			List<Cotisation> listeCotisations = remunerationEmployeService
+					.listerCotisation(bullRq.getRemunerationEmployeId());
+			List<Cotisation> listeCotisationsNonImposables = new ArrayList<Cotisation>();
+			List<Cotisation> listeCotisationsImpossables = new ArrayList<Cotisation>();
+			for (Cotisation c : listeCotisations) {
+				if (c.getImposable() == false) {
+					listeCotisationsNonImposables.add(c);
+				} else {
+					listeCotisationsImpossables.add(c);
+				}
+			}
 
 			Grade grade = bulletinSalaireService.getGrade(bulletin.getId());
 
@@ -95,26 +123,12 @@ public class BulletinSalaireController {
 			Entreprise entreprise = bulletinSalaireService.getEnterprise(bulletin.getId());
 
 			CreerBulletinSalaireReponseDtoPost bulletinPost = new CreerBulletinSalaireReponseDtoPost(bulletin, grade,
-					matricule, entreprise, CotisationsNonImp, CotisationsImpossable);
+					matricule, entreprise, listeCotisationsNonImposables, listeCotisationsImpossables);
 			return ResponseEntity.ok(bulletinPost);
 
 		} else {
 			return ResponseEntity.badRequest().body("tous les champs sont obligatoires !");
 		}
-	}
-
-	/**
-	 * @param bullRq
-	 * @return
-	 */
-	public List<Cotisation> ListerCotisations(CreerBulletinSalaireResquestDtoPost bullRq, Boolean b) {
-		Optional<RemunerationEmploye> listeCotisationsNonImp = remunerationEmployeRepository
-				.listerCotisations(bullRq.getRemunerationEmployeId(), b);
-
-		List<Cotisation> CotisationsNonImp = listeCotisationsNonImp
-				.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations Imposables"))
-				.getProfilRemuneration().getCotisations();
-		return CotisationsNonImp;
 	}
 
 	@ExceptionHandler(PaieException.class)

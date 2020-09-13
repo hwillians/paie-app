@@ -52,14 +52,8 @@ public class BulletinSalaireService {
 				.getGrade();
 	}
 
-	public List<Cotisation> listerCotisationNonImp(Integer id) {
-		return bulletinSalaireRepositorie.findCotisationsNonImp(id)
-				.orElseThrow(() -> new RuntimeException("erreur : optention Cotisations Non Imposables"))
-				.getRemunerationEmploye().getProfilRemuneration().getCotisations();
-	}
-
-	public List<Cotisation> listerCotisationImposable(Integer id) {
-		return bulletinSalaireRepositorie.findCotisationsImp(id)
+	public List<Cotisation> listerCotisation(Integer id) {
+		return bulletinSalaireRepositorie.findCotisations(id)
 				.orElseThrow(() -> new RuntimeException("erreur : optention Cotosations Imposables"))
 				.getRemunerationEmploye().getProfilRemuneration().getCotisations();
 	}
@@ -103,4 +97,5 @@ public class BulletinSalaireService {
 
 		return bulletinSalaireRepositorie.save(bulletin);
 	}
+
 }
