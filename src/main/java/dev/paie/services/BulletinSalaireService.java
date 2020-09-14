@@ -43,7 +43,9 @@ public class BulletinSalaireService {
 	}
 
 	public List<BulletinSalaire> listerBulletins(LocalDate date, Integer periodeId, List<String> matricules) {
+
 		return bulletinSalaireRepositorie.findAllByDateCreationAndPeriodeAndMatricules(date, periodeId, matricules);
+
 	}
 
 	public Grade getGrade(Integer id) {
@@ -71,7 +73,7 @@ public class BulletinSalaireService {
 	}
 
 	@Transactional
-	public BulletinSalaire creerBulletin(Integer perdiodeId, Integer profilRemunerationId,
+	public BulletinSalaire creerBulletin(Integer periodeId, Integer profilRemunerationId,
 			BigDecimal primeExetionnelle) {
 		List<String> messagesErreurs = new ArrayList<>();
 		Optional<RemunerationEmploye> opEmp = remunerationEmployeRepository.findById(profilRemunerationId);
@@ -79,9 +81,9 @@ public class BulletinSalaireService {
 			messagesErreurs.add("L'id " + profilRemunerationId + " ne correspond à aucun profil de Remuneration");
 		}
 
-		Optional<Periode> opPeriode = periodeRepository.findById(perdiodeId);
+		Optional<Periode> opPeriode = periodeRepository.findById(periodeId);
 		if (opPeriode.isEmpty()) {
-			messagesErreurs.add("L'id " + perdiodeId + " ne correspond à aucune periode enregistrée");
+			messagesErreurs.add("L'id " + periodeId + " ne correspond à aucune periode enregistrée");
 		}
 
 		if (!messagesErreurs.isEmpty()) {

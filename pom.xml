@@ -54,8 +54,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
+		 <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
 		</dependency>
 		
 		  <dependency>

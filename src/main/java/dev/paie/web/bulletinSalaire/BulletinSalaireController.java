@@ -62,37 +62,45 @@ public class BulletinSalaireController {
 	 */
 
 	@GetMapping
-	public List<CreerBulletinSalaireReponseDtoGet> listerBulletins(
-			@RequestBody @Valid CreerBulletinSalaireResquestDtoGet bullRq, BindingResult resValid) {
+	public ResponseEntity<?> listerBulletins(@RequestBody @Valid CreerBulletinSalaireResquestDtoGet bullRq,
+			BindingResult resValid) {
 
-		List<BulletinSalaire> listeBulletins = bulletinSalaireService.listerBulletins(bullRq.getDateCreation(),
-				bullRq.getPerdiodeId(), bullRq.getMatricules());
+		if (!resValid.hasErrors()) {
 
-		List<CreerBulletinSalaireReponseDtoGet> listBulletinRep = new ArrayList<>();
-		for (BulletinSalaire bs : listeBulletins) {
+			List<BulletinSalaire> listeBulletins = bulletinSalaireService.listerBulletins(bullRq.getDateCreation(),
+					bullRq.getPerdiodeId(), bullRq.getMatricules());
 
-			Grade grade = bulletinSalaireService.getGrade(bs.getId());
-			String matricule = bulletinSalaireService.getMatricule(bs.getId());
+			List<CreerBulletinSalaireReponseDtoGet> listBulletinRep = new ArrayList<>();
 
-			List<Cotisation> listeCotisations = bulletinSalaireService.listerCotisation(bs.getId());
-			List<Cotisation> listecotisationsNonImposables = new ArrayList<Cotisation>();
-			List<Cotisation> listecotisationsImposables = new ArrayList<Cotisation>();
+			for (BulletinSalaire bs : listeBulletins) {
 
-			for (Cotisation c : listeCotisations) {
+				Grade grade = bulletinSalaireService.getGrade(bs.getId());
+				String matricule = bulletinSalaireService.getMatricule(bs.getId());
 
-				if (c.getImposable() == false) {
-					listecotisationsNonImposables.add(c);
-				} else {
-					listecotisationsImposables.add(c);
+				List<Cotisation> listeCotisations = bulletinSalaireService.listerCotisation(bs.getId());
+				List<Cotisation> listecotisationsNonImposables = new ArrayList<Cotisation>();
+				List<Cotisation> listecotisationsImposables = new ArrayList<Cotisation>();
+
+				for (Cotisation c : listeCotisations) {
+
+					if (c.getImposable() == false) {
+						listecotisationsNonImposables.add(c);
+					} else {
+						listecotisationsImposables.add(c);
+					}
 				}
+
+				listBulletinRep.add(new CreerBulletinSalaireReponseDtoGet(bs, grade, matricule,
+						listecotisationsNonImposables, listecotisationsImposables));
+
 			}
 
-			listBulletinRep.add(new CreerBulletinSalaireReponseDtoGet(bs, grade, matricule,
-					listecotisationsNonImposables, listecotisationsImposables));
+			return ResponseEntity.ok(listBulletinRep);
 
+		} else {
+			return ResponseEntity.badRequest().body("tous les champs sont obligatoires !");
 		}
 
-		return listBulletinRep;
 	}
 
 	@PostMapping

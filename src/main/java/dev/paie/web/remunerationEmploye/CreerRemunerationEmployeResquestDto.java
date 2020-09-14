@@ -1,6 +1,7 @@
 package dev.paie.web.remunerationEmploye;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CreerRemunerationEmployeResquestDto {
@@ -9,13 +10,13 @@ public class CreerRemunerationEmployeResquestDto {
 	@Size(min = 5)
 	private String matricule;
 
-	@NotBlank
+	@NotNull
 	private Integer entrepriseId;
 
-	@NotBlank
+	@NotNull
 	private Integer profilId;
 
-	@NotBlank
+	@NotNull
 	private Integer gradeId;
 
 	/**

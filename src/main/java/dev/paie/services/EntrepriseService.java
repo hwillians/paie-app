@@ -1,5 +1,7 @@
 package dev.paie.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -22,6 +24,11 @@ public class EntrepriseService {
 	@Transactional
 	public Entreprise getEnterprise(Integer entrepriseId) {
 		return entrepriseRpository.getOne(entrepriseId);
+	}
+
+	public List<Entreprise> listerEntreprises() {
+
+		return entrepriseRpository.findAll();
 	}
 
 }
